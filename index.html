@@ -175,38 +175,31 @@ body.locked { overflow: hidden; }
 }
 .opening .beam { opacity: 1; }
 .gate-wrap { position: relative; width: min(84vw, 400px, 50vh); aspect-ratio: 280 / 430; z-index: 2; }
-.gate {
-  position: absolute; inset: 0; overflow: hidden; perspective: 1100px;
-  border-radius: 50% 50% 0 0 / 32% 32% 0 0;
-  background: radial-gradient(70% 55% at 50% 58%, #fffaf0 0%, #f9e6cf 45%, #eccbab 100%);
-  box-shadow: 0 0 0 5px #eadccb, 0 0 0 6px rgba(120, 90, 70, .25), 0 30px 70px rgba(0, 0, 0, .55);
+.chuppah { position: absolute; inset: 0; }
+.ch-light {
+  position: absolute; left: 5%; right: 5%; top: 12%; bottom: 2%;
+  background: radial-gradient(70% 60% at 50% 55%, #fffaf0 0%, #f9e6cf 50%, rgba(236, 203, 171, .55) 100%);
 }
-.door {
-  position: absolute; top: 0; bottom: 0; width: 50%;
-  transition: transform 1.9s cubic-bezier(.6, .04, .25, 1);
+.ch-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.ch-svg.back { z-index: 1; }
+.ch-svg.front { z-index: 3; }
+.curtain {
+  position: absolute; top: 13%; bottom: 1.5%; width: 46.5%; z-index: 2; overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0) 30%, rgba(236, 222, 205, .35)),
+    repeating-linear-gradient(90deg, rgba(255, 252, 247, .94) 0, rgba(238, 226, 211, .9) 7px, rgba(255, 252, 247, .94) 14px);
+  box-shadow: inset 0 0 22px rgba(170, 130, 100, .18);
+  transition: transform 2s cubic-bezier(.6, .04, .25, 1);
 }
-.door.l { left: 0; transform-origin: left center; background: linear-gradient(90deg, #ece1d3, #f7f0e6 55%, #e4d5c3); box-shadow: inset -1px 0 0 rgba(110, 80, 60, .3); }
-.door.r { right: 0; transform-origin: right center; background: linear-gradient(270deg, #ece1d3, #f7f0e6 55%, #e4d5c3); box-shadow: inset 1px 0 0 rgba(255, 255, 255, .6); }
-.opening .door.l { transform: rotateY(104deg); }
-.opening .door.r { transform: rotateY(-104deg); }
-.door::before, .door::after { content: ""; position: absolute; border: 1px solid rgba(150, 112, 88, .32); border-radius: 3px; }
-.door.l::before { left: 18%; right: 13%; top: 30%; height: 28%; }
-.door.r::before { left: 13%; right: 18%; top: 30%; height: 28%; }
-.door.l::after { left: 18%; right: 13%; top: 64%; bottom: 7%; }
-.door.r::after { left: 13%; right: 18%; top: 64%; bottom: 7%; }
-.door .mono {
-  position: absolute; top: 33%; height: 22%; display: grid; place-items: center;
-  font-family: var(--f-script); font-size: min(18vw, 80px, 9.5vh); color: #c08f82;
+.curtain.l { left: 3.5%; transform-origin: left top; border-bottom-right-radius: 30% 4%; }
+.curtain.r { right: 3.5%; transform-origin: right top; border-bottom-left-radius: 30% 4%; }
+.opening .curtain { transform: scaleX(.17); }
+.curtain .mono {
+  position: absolute; left: 0; right: 0; top: 26%; text-align: center;
+  font-family: var(--f-script); font-size: min(17vw, 76px, 9vh); line-height: 1; color: #c39684;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .7);
 }
-.door.l .mono { left: 18%; right: 13%; }
-.door.r .mono { left: 13%; right: 18%; }
-.door i {
-  position: absolute; top: 60%; width: 12px; height: 12px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #f3dfb8, #b8915d 70%);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
-}
-.door.l i { right: 10px; }
-.door.r i { left: 10px; }
+.chuppah .seam { top: 14%; }
 .intro-cap {
   position: absolute; left: 50%; top: calc(100% + 76px); transform: translateX(-50%); white-space: nowrap; z-index: 4;
   margin: 0; font-family: var(--f-caps); font-size: 13px; letter-spacing: .34em; padding-left: .34em;
@@ -238,10 +231,37 @@ body.locked { overflow: hidden; }
     <div class="beam"></div>
     <div class="rays"></div>
     <div class="gate-wrap">
-      <div class="gate" id="gate">
-        <div class="door l"><span class="mono">Д</span><i></i></div>
-        <div class="door r"><span class="mono">М</span><i></i></div>
+      <div class="chuppah" id="gate">
+        <div class="ch-light"></div>
+        <svg class="ch-svg back" viewBox="0 0 280 430" aria-hidden="true">
+          <defs>
+            <linearGradient id="chPole" x1="0" x2="1"><stop offset="0" stop-color="#cdb699"/><stop offset=".45" stop-color="#f8f0e4"/><stop offset="1" stop-color="#c8b091"/></linearGradient>
+            <linearGradient id="chCloth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf9f3"/><stop offset="1" stop-color="#ebdecb"/></linearGradient>
+            <radialGradient id="chGold" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#f6e2b6"/><stop offset="1" stop-color="#b8915d"/></radialGradient>
+          </defs>
+          <ellipse cx="140" cy="426" rx="150" ry="9" fill="rgba(0,0,0,.35)"/>
+          <rect x="43" y="64" width="6" height="350" rx="2" fill="url(#chPole)" opacity=".7"/>
+          <rect x="231" y="64" width="6" height="350" rx="2" fill="url(#chPole)" opacity=".7"/>
+          <path d="M40 64H240" stroke="#e7dbc9" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+        </svg>
+        <div class="curtain l"><span class="mono">Д</span></div>
+        <div class="curtain r"><span class="mono">М</span></div>
         <div class="seam-wrap"><div class="seam"></div></div>
+        <svg class="ch-svg front" viewBox="0 0 280 430" aria-hidden="true">
+          <rect x="3" y="26" width="11" height="404" rx="3" fill="url(#chPole)"/>
+          <rect x="266" y="26" width="11" height="404" rx="3" fill="url(#chPole)"/>
+          <rect x="1" y="420" width="15" height="10" rx="2" fill="url(#chGold)"/>
+          <rect x="264" y="420" width="15" height="10" rx="2" fill="url(#chGold)"/>
+          <path d="M-6 36Q140 14 286 36V60H-6Z" fill="url(#chCloth)"/>
+          <path d="M-6 47Q140 27 286 47" fill="none" stroke="#4f739b" stroke-width="2.6" opacity=".85"/>
+          <path d="M-6 53Q140 33 286 53" fill="none" stroke="#4f739b" stroke-width="1.1" opacity=".75"/>
+          <path d="M-6 41Q140 21 286 41" fill="none" stroke="#4f739b" stroke-width="1.1" opacity=".75"/>
+          <path d="M286 59.5Q236 88 186.7 59.5Q140 88 93.3 59.5Q44 88 -6 59.5Z" fill="url(#chCloth)"/>
+          <path d="M286 60Q236 88.5 186.7 60Q140 88.5 93.3 60Q44 88.5 -6 60" fill="none" stroke="rgba(130,95,70,.28)" stroke-width="1"/>
+          <path d="M286 63Q236 91.5 186.7 63Q140 91.5 93.3 63Q44 91.5 -6 63" fill="none" stroke="#e9dccb" stroke-width="6" stroke-dasharray="1 2.4"/>
+          <circle cx="8.5" cy="22" r="6.5" fill="url(#chGold)"/>
+          <circle cx="271.5" cy="22" r="6.5" fill="url(#chGold)"/>
+        </svg>
       </div>
     </div>
     <canvas id="gateFlora"></canvas>
@@ -625,23 +645,28 @@ body.locked { overflow: hidden; }
 
   function gateLayout(f) {
     var b = gate.getBoundingClientRect(), r = rng(6062027), items = [];
-    var u = Math.max(24, b.width / 7), cx = b.left + b.width / 2, ry = b.height * .32, cy = b.top + ry, o = u * .2, i, a, y, idx = 0;
-    var steps = 6;
-    for (i = 0; i <= steps; i++) {
-      y = b.bottom - i * (b.height - ry) / steps;
-      cluster(items, r, b.left - o, y, u * (i < 2 ? 1.1 : .9), Math.PI, i === 0, idx++ * 55);
+    var u = Math.max(24, b.width / 7), top = b.top + b.height * .065, L = b.left + b.width * .03, R = b.right - b.width * .03, idx = 0, i, x, y, edge;
+    // Girlande auf dem Baldachin
+    for (i = 0; i <= 8; i++) {
+      x = b.left - u * .2 + i / 8 * (b.width + u * .4); y = top - u * .15 + Math.sin(i * 1.7) * u * .12;
+      edge = i < 2 || i > 6;
+      if (!edge && i !== 4) continue;
+      cluster(items, r, x, y - (edge ? 0 : u * .35), u * (edge ? 1.1 : .5), -Math.PI / 2 + (r() - .5), edge, idx++ * 50);
     }
-    for (i = 1; i < 12; i++) {
-      a = Math.PI + i / 12 * Math.PI;
-      cluster(items, r, cx + Math.cos(a) * (b.width / 2 + o), cy + Math.sin(a) * (ry + o), u * (a < Math.PI * 1.45 ? 1.1 : .85), a, a < Math.PI * 1.4, idx++ * 55);
+    // Kaskade am linken Pfosten lang, rechts kürzer
+    for (i = 1; i <= 5; i++) cluster(items, r, L + (r() - .5) * u * .3, top + i * u * .95, u * (1.05 - i * .08), Math.PI, i < 2, idx++ * 50);
+    for (i = 1; i <= 3; i++) cluster(items, r, R + (r() - .5) * u * .3, top + i * u * .95, u * (.95 - i * .1), 0, false, idx++ * 50);
+    // einzelne Blüten an den Pfosten
+    for (i = 0; i < 3; i++) {
+      y = b.top + b.height * (.5 + i * .12);
+      cluster(items, r, L, y, u * .5, Math.PI, false, idx++ * 50);
+      cluster(items, r, R, y + u * .4, u * .45, 0, false, idx++ * 50);
     }
-    for (i = 0; i <= steps; i++) {
-      y = cy + i * (b.height - ry) / steps;
-      if (i > 0 && i < 3 && r() < .5) continue;
-      cluster(items, r, b.right + o, y, u * (i > 4 ? 1.1 : .85), 0, i === steps, idx++ * 55);
-    }
-    cluster(items, r, b.left + u * .5, b.bottom + u * .2, u * 1.1, Math.PI * .5, true, 0);
-    cluster(items, r, b.right - u * .4, b.bottom + u * .25, u * 1.15, Math.PI * .5, true, 80);
+    // Blumen an den Füßen
+    cluster(items, r, L + u * .3, b.bottom - u * .1, u * 1.15, -Math.PI / 2, true, 0);
+    cluster(items, r, L - u * .5, b.bottom + u * .1, u * .9, Math.PI, false, 40);
+    cluster(items, r, R - u * .3, b.bottom - u * .1, u * 1.1, -Math.PI / 2, true, 80);
+    cluster(items, r, R + u * .5, b.bottom + u * .15, u * .85, 0, false, 120);
     return items;
   }
 
