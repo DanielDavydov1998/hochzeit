@@ -114,21 +114,6 @@ body.locked { overflow: hidden; }
   border: 1px solid var(--rose-soft); border-radius: 999px; background: rgba(255, 255, 255, .55);
 }
 .btn:hover, .btn:focus-visible { border-color: var(--rose); outline: none; background: #fff; }
-button.btn { cursor: pointer; line-height: inherit; -webkit-appearance: none; appearance: none; }
-.cal-wrap { position: relative; display: flex; }
-.calmenu {
-  position: absolute; right: 0; bottom: calc(100% + 8px); z-index: 6;
-  display: flex; flex-direction: column; min-width: 200px; padding: 6px;
-  background: #fffdf9; border: 1px solid var(--rose-soft); border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(90, 60, 40, .2);
-}
-.calmenu a {
-  padding: 12px 14px; border-radius: 9px; text-align: left; text-decoration: none; color: var(--ink);
-  font-family: var(--f-caps); font-size: 13px; letter-spacing: .08em;
-}
-.calmenu[hidden] { display: none; }
-.calmenu a + a { border-top: 1px solid rgba(217, 139, 130, .2); }
-.calmenu a:hover, .calmenu a:focus-visible { background: #f8eee6; outline: none; }
 .countdown { display: flex; justify-content: center; gap: 16px; }
 .countdown div { display: flex; flex-direction: column; align-items: center; min-width: 42px; }
 .countdown b { font-family: var(--f-caps); font-weight: 400; font-size: 22px; line-height: 1.1; color: var(--rose); font-variant-numeric: tabular-nums; }
@@ -296,13 +281,6 @@ button.btn { cursor: pointer; line-height: inherit; -webkit-appearance: none; ap
       <p class="addr">Johannisberg 40<br>42103 Wuppertal</p>
       <div class="actions">
         <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Historische+Stadthalle+Wuppertal+Johannisberg+40+42103+Wuppertal" target="_blank" rel="noopener">Карта</a>
-        <div class="cal-wrap">
-          <button class="btn" id="cal" type="button" aria-expanded="false" aria-controls="calmenu">В календарь</button>
-          <div class="calmenu" id="calmenu" hidden>
-            <a href="https://danieldavydov1998.github.io/hochzeit/hochzeit.ics">iPhone</a>
-            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%D0%A1%D0%B2%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0+%D0%94%D0%B0%D0%BD%D0%B8%D1%8D%D0%BB%D1%8F+%D0%B8+%D0%9C%D0%B8%D1%80%D0%B8%D0%B0%D0%BC&amp;dates=20270606T140000Z/20270606T220000Z&amp;location=Historische+Stadthalle+Wuppertal,+Johannisberg+40,+42103+Wuppertal" target="_blank" rel="noopener">Google Календарь</a>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -563,17 +541,6 @@ button.btn { cursor: pointer; line-height: inherit; -webkit-appearance: none; ap
   }
   tickCountdown(); setInterval(tickCountdown, 1000);
 
-  /* ---------- Kalendereintrag ---------- */
-  var calBtn = document.getElementById('cal'), calMenu = document.getElementById('calmenu');
-  calBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    calMenu.hidden = !calMenu.hidden;
-    calBtn.setAttribute('aria-expanded', String(!calMenu.hidden));
-  });
-  document.addEventListener('click', function (e) {
-    if (!calMenu.hidden && !e.target.closest('.cal-wrap')) { calMenu.hidden = true; calBtn.setAttribute('aria-expanded', 'false'); }
-  });
-
   /* ---------- Lichter in der Szene ---------- */
   if (!reduce) {
     var orbR = rng(77);
@@ -643,7 +610,7 @@ button.btn { cursor: pointer; line-height: inherit; -webkit-appearance: none; ap
   }
 
   scene.addEventListener('pointerdown', function (e) {
-    if (e.target.closest('a, button, .calmenu')) return;
+    if (e.target.closest('a')) return;
     fx.burst(e.clientX, e.clientY, 18, 12, 230);
   });
 
