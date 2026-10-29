@@ -239,54 +239,53 @@ body.locked { overflow: hidden; }
             <linearGradient id="chCloth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf9f3"/><stop offset="1" stop-color="#ebdecb"/></linearGradient>
             <linearGradient id="chUnder" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dcc9"/><stop offset="1" stop-color="#f6eee2"/></linearGradient>
             <radialGradient id="chGold" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#f6e2b6"/><stop offset="1" stop-color="#b8915d"/></radialGradient>
-            <linearGradient id="chStar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dca8"/><stop offset=".5" stop-color="#c9a160"/><stop offset="1" stop-color="#a87f45"/></linearGradient>
-            <radialGradient id="chGlow"><stop offset="0" stop-color="#fff4d8" stop-opacity=".9"/><stop offset="1" stop-color="#fff4d8" stop-opacity="0"/></radialGradient>
           </defs>
           <!-- Boden unter der Chuppa -->
           <path d="M8 430L272 430L234 394H46Z" fill="rgba(110,80,60,.18)"/>
           <ellipse cx="140" cy="426" rx="150" ry="9" fill="rgba(0,0,0,.35)"/>
           <!-- hintere Stangen -->
-          <rect x="43" y="74" width="6" height="321" rx="2" fill="url(#chPole)" opacity=".85"/>
-          <rect x="231" y="74" width="6" height="321" rx="2" fill="url(#chPole)" opacity=".85"/>
+          <rect x="43" y="80" width="6" height="315" rx="2" fill="url(#chPole)" opacity=".85"/>
+          <rect x="231" y="80" width="6" height="315" rx="2" fill="url(#chPole)" opacity=".85"/>
           <!-- Unterseite des Baldachins (Tallit) -->
-          <path d="M-6 52H286L238 77H42Z" fill="url(#chUnder)"/>
-          <path d="M50 72.5H230M53 69.5H227" stroke="#4f739b" stroke-width="1.3" opacity=".7"/>
-          <path d="M44 79H236" stroke="#e6d9c6" stroke-width="4" stroke-dasharray="1 2.4"/>
+          <path d="M-6 60H286L238 82H42Z" fill="url(#chUnder)"/>
+          <path d="M50 77.5H230M53 74.5H227" stroke="#4f739b" stroke-width="1.3" opacity=".7"/>
+          <path d="M44 84H236" stroke="#e6d9c6" stroke-width="4" stroke-dasharray="1 2.4"/>
         </svg>
         <div class="curtain l"><span class="mono">Д</span></div>
         <div class="curtain r"><span class="mono">М</span></div>
         <div class="seam-wrap"><div class="seam"></div></div>
         <svg class="ch-svg front" viewBox="0 0 280 430" aria-hidden="true">
           <!-- vordere Stangen -->
-          <rect x="3" y="30" width="11" height="400" rx="3" fill="url(#chPole)"/>
-          <rect x="266" y="30" width="11" height="400" rx="3" fill="url(#chPole)"/>
+          <rect x="3" y="18" width="11" height="412" rx="3" fill="url(#chPole)"/>
+          <rect x="266" y="18" width="11" height="412" rx="3" fill="url(#chPole)"/>
           <rect x="1" y="420" width="15" height="10" rx="2" fill="url(#chGold)"/>
           <rect x="264" y="420" width="15" height="10" rx="2" fill="url(#chGold)"/>
-          <!-- Vorderkante des Tallit mit Streifen -->
-          <path d="M-6 40Q140 30 286 40V60H-6Z" fill="url(#chCloth)"/>
-          <path d="M-6 45Q140 35 286 45" fill="none" stroke="#4f739b" stroke-width="1.1" opacity=".75"/>
-          <path d="M-6 49.5Q140 39.5 286 49.5" fill="none" stroke="#4f739b" stroke-width="2.6" opacity=".85"/>
-          <path d="M-6 54Q140 44 286 54" fill="none" stroke="#4f739b" stroke-width="1.1" opacity=".75"/>
+          <!-- Tallit-Dach: hohe Stoffbahn mit Streifen -->
+          <path d="M-6 18Q140 8 286 18V64H-6Z" fill="url(#chCloth)"/>
+          <path d="M-6 18Q140 8 286 18" fill="none" stroke="rgba(130,95,70,.25)" stroke-width="1"/>
+          <path d="M-6 22.5Q140 12.5 286 22.5" fill="none" stroke="#4f739b" stroke-width="1" opacity=".75"/>
+          <path d="M-6 26.5Q140 16.5 286 26.5" fill="none" stroke="#4f739b" stroke-width="2.4" opacity=".85"/>
+          <path d="M-6 55Q140 45 286 55" fill="none" stroke="#4f739b" stroke-width="2.4" opacity=".85"/>
+          <path d="M-6 59Q140 49 286 59" fill="none" stroke="#4f739b" stroke-width="1" opacity=".75"/>
+          <!-- Davidstern im Dach -->
+          <g fill="none" stroke="#4f739b" stroke-width="1.9" stroke-linejoin="round">
+            <path d="M140 23L149.5 39.5H130.5Z"/>
+            <path d="M140 45L149.5 28.5H130.5Z"/>
+          </g>
           <!-- Bögen und Fransen -->
-          <path d="M286 59.5Q236 86 186.7 59.5Q140 86 93.3 59.5Q44 86 -6 59.5Z" fill="url(#chCloth)"/>
-          <path d="M286 60Q236 86.5 186.7 60Q140 86.5 93.3 60Q44 86.5 -6 60" fill="none" stroke="rgba(130,95,70,.28)" stroke-width="1"/>
-          <path d="M286 63Q236 89.5 186.7 63Q140 89.5 93.3 63Q44 89.5 -6 63" fill="none" stroke="#e9dccb" stroke-width="6" stroke-dasharray="1 2.4"/>
+          <path d="M286 63.5Q237.3 90 188.7 63.5Q140 90 91.3 63.5Q42.7 90 -6 63.5Z" fill="url(#chCloth)"/>
+          <path d="M286 64Q237.3 90.5 188.7 64Q140 90.5 91.3 64Q42.7 90.5 -6 64" fill="none" stroke="rgba(130,95,70,.28)" stroke-width="1"/>
+          <path d="M286 67Q237.3 93.5 188.7 67Q140 93.5 91.3 67Q42.7 93.5 -6 67" fill="none" stroke="#e9dccb" stroke-width="6" stroke-dasharray="1 2.4"/>
           <!-- Zizit an den Ecken -->
           <g stroke="#f7f0e4" stroke-width=".9" stroke-linecap="round" fill="none">
-            <path d="M18 68l-1.5 30M19 68l-.5 31M20 68l.5 31M21 68l1.5 30"/>
-            <path d="M259 68l-1.5 30M260 68l-.5 31M261 68l.5 31M262 68l1.5 30"/>
+            <path d="M18 72l-1.5 30M19 72l-.5 31M20 72l.5 31M21 72l1.5 30"/>
+            <path d="M259 72l-1.5 30M260 72l-.5 31M261 72l.5 31M262 72l1.5 30"/>
           </g>
-          <rect x="16.5" y="60" width="6" height="9" rx="2" fill="#efe5d6" stroke="rgba(130,95,70,.3)" stroke-width=".6"/>
-          <rect x="257.5" y="60" width="6" height="9" rx="2" fill="#efe5d6" stroke="rgba(130,95,70,.3)" stroke-width=".6"/>
+          <rect x="16.5" y="64" width="6" height="9" rx="2" fill="#efe5d6" stroke="rgba(130,95,70,.3)" stroke-width=".6"/>
+          <rect x="257.5" y="64" width="6" height="9" rx="2" fill="#efe5d6" stroke="rgba(130,95,70,.3)" stroke-width=".6"/>
           <!-- Kugeln auf den Stangen -->
-          <circle cx="8.5" cy="26" r="6.5" fill="url(#chGold)"/>
-          <circle cx="271.5" cy="26" r="6.5" fill="url(#chGold)"/>
-          <!-- Davidstern oben in der Mitte -->
-          <circle cx="140" cy="14" r="38" fill="url(#chGlow)"/>
-          <g fill="none" stroke="url(#chStar)" stroke-width="3.4" stroke-linejoin="round">
-            <path d="M140 -13L163.4 27.5H116.6Z"/>
-            <path d="M140 41L163.4 .5H116.6Z"/>
-          </g>
+          <circle cx="8.5" cy="13" r="6.5" fill="url(#chGold)"/>
+          <circle cx="271.5" cy="13" r="6.5" fill="url(#chGold)"/>
         </svg>
       </div>
     </div>
@@ -671,28 +670,15 @@ body.locked { overflow: hidden; }
 
   function gateLayout(f) {
     var b = gate.getBoundingClientRect(), r = rng(6062027), items = [];
-    var u = Math.max(24, b.width / 7), top = b.top + b.height * .065, L = b.left + b.width * .03, R = b.right - b.width * .03, idx = 0, i, x, y, edge;
-    // Girlande auf dem Baldachin
-    for (i = 0; i <= 8; i++) {
-      x = b.left - u * .2 + i / 8 * (b.width + u * .4); y = top - u * .15 + Math.sin(i * 1.7) * u * .12;
-      edge = i < 2 || i > 6;
-      if (!edge) continue;
-      cluster(items, r, x, y - (edge ? 0 : u * .35), u * (edge ? 1.1 : .5), -Math.PI / 2 + (r() - .5), edge, idx++ * 50);
-    }
-    // Kaskade am linken Pfosten lang, rechts kürzer
-    for (i = 1; i <= 5; i++) cluster(items, r, L + (r() - .5) * u * .3, top + i * u * .95, u * (1.05 - i * .08), Math.PI, i < 2, idx++ * 50);
-    for (i = 1; i <= 3; i++) cluster(items, r, R + (r() - .5) * u * .3, top + i * u * .95, u * (.95 - i * .1), 0, false, idx++ * 50);
-    // einzelne Blüten an den Pfosten
-    for (i = 0; i < 3; i++) {
-      y = b.top + b.height * (.5 + i * .12);
-      cluster(items, r, L, y, u * .5, Math.PI, false, idx++ * 50);
-      cluster(items, r, R, y + u * .4, u * .45, 0, false, idx++ * 50);
-    }
+    var u = Math.max(24, b.width / 7), top = b.top + b.height * .04, L = b.left + b.width * .03, R = b.right - b.width * .03;
+    // je ein Strauß an den oberen Ecken des Daches
+    cluster(items, r, b.left - u * .15, top, u * .95, -Math.PI * .75, true, 0);
+    cluster(items, r, b.right + u * .15, top + u * .1, u * .85, -Math.PI * .25, false, 60);
+    // ein paar Blüten am linken Pfosten
+    cluster(items, r, L, top + u * 1.1, u * .6, Math.PI, false, 120);
     // Blumen an den Füßen
-    cluster(items, r, L + u * .3, b.bottom - u * .1, u * 1.15, -Math.PI / 2, true, 0);
-    cluster(items, r, L - u * .5, b.bottom + u * .1, u * .9, Math.PI, false, 40);
-    cluster(items, r, R - u * .3, b.bottom - u * .1, u * 1.1, -Math.PI / 2, true, 80);
-    cluster(items, r, R + u * .5, b.bottom + u * .15, u * .85, 0, false, 120);
+    cluster(items, r, L + u * .2, b.bottom - u * .1, u * .95, -Math.PI / 2, true, 30);
+    cluster(items, r, R - u * .2, b.bottom - u * .1, u * .9, -Math.PI / 2, false, 90);
     return items;
   }
 
