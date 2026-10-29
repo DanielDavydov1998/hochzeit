@@ -8,7 +8,7 @@
 <meta property="og:title" content="Даниэль &amp; Мириам · Свадьба">
 <meta property="og:description" content="06.06.2027 · Historische Stadthalle Wuppertal">
 <meta property="og:type" content="website">
-<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
+<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
 <title>Даниэль и Мириам</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -126,6 +126,7 @@ button.btn { cursor: pointer; line-height: inherit; -webkit-appearance: none; ap
   padding: 12px 14px; border-radius: 9px; text-align: left; text-decoration: none; color: var(--ink);
   font-family: var(--f-caps); font-size: 13px; letter-spacing: .08em;
 }
+.calmenu[hidden] { display: none; }
 .calmenu a + a { border-top: 1px solid rgba(217, 139, 130, .2); }
 .calmenu a:hover, .calmenu a:focus-visible { background: #f8eee6; outline: none; }
 .countdown { display: flex; justify-content: center; gap: 16px; }
@@ -298,7 +299,7 @@ button.btn { cursor: pointer; line-height: inherit; -webkit-appearance: none; ap
         <div class="cal-wrap">
           <button class="btn" id="cal" type="button" aria-expanded="false" aria-controls="calmenu">В календарь</button>
           <div class="calmenu" id="calmenu" hidden>
-            <a href="https://danieldavydov1998.github.io/hochzeit/hochzeit.ics">iPhone · Outlook</a>
+            <a href="https://danieldavydov1998.github.io/hochzeit/hochzeit.ics">iPhone</a>
             <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%D0%A1%D0%B2%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0+%D0%94%D0%B0%D0%BD%D0%B8%D1%8D%D0%BB%D1%8F+%D0%B8+%D0%9C%D0%B8%D1%80%D0%B8%D0%B0%D0%BC&amp;dates=20270606T140000Z/20270606T220000Z&amp;location=Historische+Stadthalle+Wuppertal,+Johannisberg+40,+42103+Wuppertal" target="_blank" rel="noopener">Google Календарь</a>
           </div>
         </div>
