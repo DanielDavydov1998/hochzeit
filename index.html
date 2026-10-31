@@ -704,16 +704,18 @@ body.locked { overflow: hidden; }
         if (r < ROWS - 1 && c < COLS - 1 && (r + c) % 2) link(a, a + COLS + 1, .35);
         if (r < ROWS - 2) link(a, a + COLS * 2, .5);
       }
-      // zusammengeraffte Lage der oberen Kante: gleiche Stofflänge, aber 17 % der Breite -> tiefere Falten
-      var gzs = [0], sum = 0;
+      // Raffhalter: eine Reihe auf gut halber Höhe wird zur Stange hin auf 22 % der Breite zusammengefasst
+      var TIE = Math.round(ROWS * .6), SQ = .22, gzs = [0], sum = 0, tie = [], ox = P[outer * 3];
       for (c = 0; c < COLS - 1; c++) {
         var dz0 = P[(c + 1) * 3 + 2] - P[c * 3 + 2], len0 = Math.hypot(d, dz0);
-        var dz1 = Math.sqrt(Math.max(0, len0 * len0 - .17 * .17 * d * d)) * (dz0 >= 0 ? 1 : -1);
-        gzs.push(gzs[c] + dz1);
+        gzs.push(gzs[c] + Math.sqrt(Math.max(0, len0 * len0 - SQ * SQ * d * d)) * (dz0 >= 0 ? 1 : -1));
       }
       for (c = 0; c < COLS; c++) sum += gzs[c];
-      for (c = 0; c < COLS; c++) pin.push({ i: c, x: P[c * 3], z: P[c * 3 + 2], ox: P[outer * 3], gz: Math.max(-d * 3, Math.min(d * 3, gzs[c] - sum / COLS)) });
-      return { side: side, letter: letter, P: P, Q: Q, pin: pin, cons: cons, d: d, sy: sy, amp: amp, c0: Math.floor(COLS / 2) - 3, c1: Math.floor(COLS / 2) + 3, r0: 4, r1: 11 };
+      for (c = 0; c < COLS; c++) {
+        var ti = TIE * COLS + c;
+        tie.push({ i: ti, tx: ox + (c - outer) * d * SQ, ty: P[ti * 3 + 1] - sy * .3, tz: Math.max(-d * 2.5, Math.min(d * 2.5, gzs[c] - sum / COLS)) });
+      }
+      return { side: side, letter: letter, P: P, Q: Q, tie: tie, TIE: TIE, ox: ox, cons: cons, d: d, sy: sy, amp: amp, c0: Math.floor(COLS / 2) - 3, c1: Math.floor(COLS / 2) + 3, r0: 4, r1: 11 };
     }
 
     function build() {
@@ -728,40 +730,33 @@ body.locked { overflow: hidden; }
 
     function step() {
       t += DT;
-      var og = openAt < 0 ? 0 : t - openAt, gust = og > 0 ? Math.min(1, og / .25) * Math.exp(-og / .9) : 0;
-      mo = ease(og / 1.9);
+      var og = openAt < 0 ? -1 : t - openAt;
+      mo = og < 0 ? 0 : ease(og / 1.6);
       for (var s = 0; s < 2; s++) {
-        var S = sheets[s], P = S.P, Q = S.Q, n = P.length / 3, side = S.side;
+        var S = sheets[s], P = S.P, Q = S.Q, n = P.length / 3, tied = og >= 0;
         for (var i = 0; i < n; i++) {
           var j = i * 3, row = Math.floor(i / COLS);
-          if (row === 0) continue;
+          if (row === 0 || (tied && row === S.TIE)) continue;
           var x = P[j], y = P[j + 1], z = P[j + 2], f = row / (ROWS - 1);
-          // leichte Brise
-          var ax = 22 * Math.sin(t * .8 + y * .012 + s * 2) * f;
-          var az = (55 * Math.sin(t * 1.15 + y * .018 + x * .025 + s) + 30 * Math.sin(t * 2.2 - y * .035 + x * .01)) * f;
-          var ay = GRAV;
-          // Windstoß beim Öffnen: Stoff fliegt nach außen, nach vorn und hebt sich
-          if (gust > 0) {
-            var wob = .65 + .35 * Math.sin(y * .045 + x * .03 + t * 9);
-            ax += side * 3400 * gust * wob * f;
-            ay -= 1900 * gust * wob * f * f;
-            az += 2600 * gust * Math.sin(x * .06 + y * .02 + t * 7) * f;
-          }
-          var vx = (x - Q[j]) * .985, vy = (y - Q[j + 1]) * .985, vz = (z - Q[j + 2]) * .985;
+          // ganz leichter Luftzug
+          var ax = 6 * Math.sin(t * .7 + y * .012 + s * 2) * f;
+          var az = (16 * Math.sin(t * 1.05 + y * .018 + x * .025 + s) + 8 * Math.sin(t * 1.9 - y * .03)) * f;
+          var vx = (x - Q[j]) * .97, vy = (y - Q[j + 1]) * .97, vz = (z - Q[j + 2]) * .97;
           Q[j] = x; Q[j + 1] = y; Q[j + 2] = z;
-          P[j] = x + vx + ax * DT * DT; P[j + 1] = y + vy + ay * DT * DT; P[j + 2] = z + vz + az * DT * DT;
+          P[j] = x + vx + ax * DT * DT; P[j + 1] = y + vy + GRAV * DT * DT; P[j + 2] = z + vz + az * DT * DT;
         }
-        // obere Kante hängt an der Stange und wird beim Öffnen zusammengerafft
-        for (var p = 0; p < S.pin.length; p++) {
-          var pn = S.pin[p], k = pn.i * 3;
-          P[k] = pn.ox + (pn.x - pn.ox) * (1 - .83 * mo);
-          P[k + 2] = pn.z + (pn.gz - pn.z) * mo;
-          Q[k] = P[k]; Q[k + 2] = P[k + 2];
+        // Raffhalter zieht den Stoff zur Stange
+        if (tied) for (var p = 0; p < S.tie.length; p++) {
+          var T = S.tie[p], k = T.i * 3;
+          if (T.sx === undefined) { T.sx = P[k]; T.sy = P[k + 1]; T.sz = P[k + 2]; }
+          P[k] = T.sx + (T.tx - T.sx) * mo; P[k + 1] = T.sy + (T.ty - T.sy) * mo; P[k + 2] = T.sz + (T.tz - T.sz) * mo;
+          Q[k] = P[k]; Q[k + 1] = P[k + 1]; Q[k + 2] = P[k + 2];
         }
-        var C = S.cons;
+        var C = S.cons, TL = S.TIE * COLS, TH = TL + COLS;
         for (var it = 0; it < ITER; it++) {
           for (var q = 0; q < C.length; q += 4) {
-            var a = C[q] * 3, b = C[q + 1] * 3, ra = C[q] < COLS ? 0 : 1, rb = C[q + 1] < COLS ? 0 : 1;
+            var ia = C[q], ib = C[q + 1], a = ia * 3, b = ib * 3;
+            var ra = ia < COLS || (tied && ia >= TL && ia < TH) ? 0 : 1, rb = ib < COLS || (tied && ib >= TL && ib < TH) ? 0 : 1;
             if (!ra && !rb) continue;
             var dx = P[b] - P[a], dy = P[b + 1] - P[a + 1], dz = P[b + 2] - P[a + 2];
             var len = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1, diff = (len - C[q + 2]) / len * C[q + 3] / (ra + rb);
@@ -814,8 +809,21 @@ body.locked { overflow: hidden; }
         cx.setTransform(dpr * (sx[B0] - sx[A0]) / uw, dpr * (sy2[B0] - sy2[A0]) / uw, dpr * (sx[C0] - sx[A0]) / uh, dpr * (sy2[C0] - sy2[A0]) / uh, dpr * sx[A0], dpr * sy2[A0]);
         cx.font = Math.round(Math.min(W * .27, 76)) + 'px ' + font;
         cx.textAlign = 'center'; cx.textBaseline = 'middle';
-        cx.fillStyle = 'rgba(195,150,132,' + (.9 - .55 * mo).toFixed(3) + ')';
+        cx.fillStyle = 'rgba(195,150,132,.9)';
         cx.fillText(S.letter, uw / 2, uh / 2);
+        // Raffhalter-Band um den gerafften Stoff
+        if (mo > 0) {
+          var ti0 = S.TIE * COLS, inner = S.side < 0 ? ti0 + COLS - 1 : ti0, outerI = S.side < 0 ? ti0 : ti0 + COLS - 1;
+          var px = (S.side < 0 ? W * .03 : W * .97) + PAD, py = sy2[outerI], qx = sx[inner] - S.side * 3, qy = sy2[inner];
+          cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          cx.globalAlpha = Math.min(1, mo * 1.5);
+          cx.lineCap = 'round';
+          cx.strokeStyle = '#b8915d'; cx.lineWidth = 3.4;
+          cx.beginPath(); cx.moveTo(px, py); cx.quadraticCurveTo((px + qx) / 2, Math.max(py, qy) + 6, qx, qy); cx.stroke();
+          cx.strokeStyle = '#f0dcb2'; cx.lineWidth = 1.2;
+          cx.beginPath(); cx.moveTo(px, py - .6); cx.quadraticCurveTo((px + qx) / 2, Math.max(py, qy) + 5, qx, qy - .6); cx.stroke();
+          cx.globalAlpha = 1;
+        }
       }
     }
 
