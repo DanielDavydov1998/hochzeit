@@ -187,6 +187,7 @@ body.locked { overflow: hidden; }
   position: absolute; left: -14%; top: 0; width: 128%; height: 103%; z-index: 2; pointer-events: none;
   opacity: .94; filter: blur(.7px);
 }
+.cloth.ink { opacity: 1; filter: none; }
 .chuppah .seam { top: 14%; }
 .intro-cap {
   position: absolute; left: 50%; top: calc(100% + 76px); transform: translateX(-50%); white-space: nowrap; z-index: 4;
@@ -240,6 +241,7 @@ body.locked { overflow: hidden; }
           <path d="M44 84H236" stroke="#e6d9c6" stroke-width="4" stroke-dasharray="1 2.4"/>
         </svg>
         <canvas class="cloth" id="cloth"></canvas>
+        <canvas class="cloth ink" id="clothInk"></canvas>
         <div class="seam-wrap"><div class="seam"></div></div>
         <svg class="ch-svg front" viewBox="0 0 280 430" aria-hidden="true">
           <!-- vordere Stangen -->
@@ -676,6 +678,8 @@ body.locked { overflow: hidden; }
   // Vorhänge als Stoffsimulation: Punktgitter mit Federn, Schwerkraft und Wind
   var cloth = (function () {
     var cv = document.getElementById('cloth'), cx = cv.getContext('2d');
+    // zweite, scharfe Ebene für Buchstaben und Raffhalter (ohne Weichzeichner)
+    var iv = document.getElementById('clothInk'), ik = iv.getContext('2d');
     var COLS = 25, ROWS = 24, ITER = 7, DT = 1 / 60, GRAV = 1400, PERSP = 900;
     var LX = -.35, LY = -.45, LZ = .82, LL = Math.hypot(LX, LY, LZ); LX /= LL; LY /= LL; LZ /= LL;
     var font = (getComputedStyle(document.documentElement).getPropertyValue('--f-script') || 'cursive').trim();
@@ -721,7 +725,7 @@ body.locked { overflow: hidden; }
     function build() {
       dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       W = gate.clientWidth; H = gate.clientHeight; PAD = W * .14;
-      cv.width = Math.round((W + PAD * 2) * dpr); cv.height = Math.round(H * 1.03 * dpr);
+      iv.width = cv.width = Math.round((W + PAD * 2) * dpr); iv.height = cv.height = Math.round(H * 1.03 * dpr);
       sheets = [sheet(-1, 'Д'), sheet(1, 'М')];
       for (var k = 0; k < 150; k++) step();
     }
@@ -775,6 +779,7 @@ body.locked { overflow: hidden; }
     function draw() {
       cx.setTransform(1, 0, 0, 1, 0, 0);
       cx.clearRect(0, 0, cv.width, cv.height);
+      ik.setTransform(1, 0, 0, 1, 0, 0); ik.clearRect(0, 0, iv.width, iv.height);
       var mx = W / 2, my = H * .5;
       for (var s = 0; s < 2; s++) {
         var S = sheets[s], P = S.P, n = COLS * ROWS, i, j;
@@ -806,26 +811,24 @@ body.locked { overflow: hidden; }
         // Monogramm folgt dem Stoff
         var A0 = S.r0 * COLS + S.c0, B0 = S.r0 * COLS + S.c1, C0 = S.r1 * COLS + S.c0;
         var uw = S.d * (S.c1 - S.c0), uh = S.sy * (S.r1 - S.r0);
-        cx.setTransform(dpr * (sx[B0] - sx[A0]) / uw, dpr * (sy2[B0] - sy2[A0]) / uw, dpr * (sx[C0] - sx[A0]) / uh, dpr * (sy2[C0] - sy2[A0]) / uh, dpr * sx[A0], dpr * sy2[A0]);
-        cx.font = Math.round(Math.min(W * .27, 76)) + 'px ' + font;
-        cx.textAlign = 'center'; cx.textBaseline = 'middle';
-        // kräftiges Altrosa mit hellem Rand, damit die Buchstaben auf dem Stoff klar stehen
-        cx.fillStyle = 'rgba(255,255,255,.55)';
-        cx.fillText(S.letter, uw / 2 + .8, uh / 2 + 1.2);
-        cx.fillStyle = '#9a5f4c'; cx.strokeStyle = '#9a5f4c'; cx.lineWidth = .9;
-        cx.fillText(S.letter, uw / 2, uh / 2); cx.strokeText(S.letter, uw / 2, uh / 2);
+        ik.setTransform(dpr * (sx[B0] - sx[A0]) / uw, dpr * (sy2[B0] - sy2[A0]) / uw, dpr * (sx[C0] - sx[A0]) / uh, dpr * (sy2[C0] - sy2[A0]) / uh, dpr * sx[A0], dpr * sy2[A0]);
+        ik.font = Math.round(Math.min(W * .27, 76)) + 'px ' + font;
+        ik.textAlign = 'center'; ik.textBaseline = 'middle';
+        // sattes, dunkles Rosé, scharf gezeichnet
+        ik.fillStyle = ik.strokeStyle = '#8e3b47'; ik.lineWidth = .7;
+        ik.fillText(S.letter, uw / 2, uh / 2); ik.strokeText(S.letter, uw / 2, uh / 2);
         // Raffhalter-Band um den gerafften Stoff
         if (mo > 0) {
           var ti0 = S.TIE * COLS, inner = S.side < 0 ? ti0 + COLS - 1 : ti0, outerI = S.side < 0 ? ti0 : ti0 + COLS - 1;
           var px = (S.side < 0 ? W * .03 : W * .97) + PAD, py = sy2[outerI], qx = sx[inner] - S.side * 3, qy = sy2[inner];
-          cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          cx.globalAlpha = Math.min(1, mo * 1.5);
-          cx.lineCap = 'round';
-          cx.strokeStyle = '#b8915d'; cx.lineWidth = 3.4;
-          cx.beginPath(); cx.moveTo(px, py); cx.quadraticCurveTo((px + qx) / 2, Math.max(py, qy) + 6, qx, qy); cx.stroke();
-          cx.strokeStyle = '#f0dcb2'; cx.lineWidth = 1.2;
-          cx.beginPath(); cx.moveTo(px, py - .6); cx.quadraticCurveTo((px + qx) / 2, Math.max(py, qy) + 5, qx, qy - .6); cx.stroke();
-          cx.globalAlpha = 1;
+          ik.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ik.globalAlpha = Math.min(1, mo * 1.5);
+          ik.lineCap = 'round';
+          ik.strokeStyle = '#b8915d'; ik.lineWidth = 3.4;
+          ik.beginPath(); ik.moveTo(px, py); ik.quadraticCurveTo((px + qx) / 2, Math.max(py, qy) + 6, qx, qy); ik.stroke();
+          ik.strokeStyle = '#f0dcb2'; ik.lineWidth = 1.2;
+          ik.beginPath(); ik.moveTo(px, py - .6); ik.quadraticCurveTo((px + qx) / 2, Math.max(py, qy) + 5, qx, qy - .6); ik.stroke();
+          ik.globalAlpha = 1;
         }
       }
     }
