@@ -809,8 +809,11 @@ body.locked { overflow: hidden; }
         cx.setTransform(dpr * (sx[B0] - sx[A0]) / uw, dpr * (sy2[B0] - sy2[A0]) / uw, dpr * (sx[C0] - sx[A0]) / uh, dpr * (sy2[C0] - sy2[A0]) / uh, dpr * sx[A0], dpr * sy2[A0]);
         cx.font = Math.round(Math.min(W * .27, 76)) + 'px ' + font;
         cx.textAlign = 'center'; cx.textBaseline = 'middle';
-        cx.fillStyle = 'rgba(195,150,132,.9)';
-        cx.fillText(S.letter, uw / 2, uh / 2);
+        // kräftiges Altrosa mit hellem Rand, damit die Buchstaben auf dem Stoff klar stehen
+        cx.fillStyle = 'rgba(255,255,255,.55)';
+        cx.fillText(S.letter, uw / 2 + .8, uh / 2 + 1.2);
+        cx.fillStyle = '#9a5f4c'; cx.strokeStyle = '#9a5f4c'; cx.lineWidth = .9;
+        cx.fillText(S.letter, uw / 2, uh / 2); cx.strokeText(S.letter, uw / 2, uh / 2);
         // Raffhalter-Band um den gerafften Stoff
         if (mo > 0) {
           var ti0 = S.TIE * COLS, inner = S.side < 0 ? ti0 + COLS - 1 : ti0, outerI = S.side < 0 ? ti0 : ti0 + COLS - 1;
