@@ -185,7 +185,7 @@ body.locked { overflow: hidden; }
 .ch-svg.front { z-index: 3; }
 .cloth {
   position: absolute; left: -14%; top: 0; width: 128%; height: 103%; z-index: 2; pointer-events: none;
-  opacity: .94; filter: blur(.7px);
+  opacity: .97; filter: blur(1px);
 }
 .cloth.ink { opacity: 1; filter: none; }
 .chuppah .seam { top: 14%; }
@@ -771,10 +771,11 @@ body.locked { overflow: hidden; }
       }
     }
 
-    var sx = new Float32Array(COLS * ROWS), sy2 = new Float32Array(COLS * ROWS), LEV = 28, cols = [];
+    var sx = new Float32Array(COLS * ROWS), sy2 = new Float32Array(COLS * ROWS), LEV = 48, cols = [];
     for (var o = 0; o < LEV; o++) {
-      var sh0 = .25 + .75 * o / (LEV - 1);
-      cols.push('rgb(' + Math.round(200 + 55 * sh0) + ',' + Math.round(172 + 79 * sh0) + ',' + Math.round(150 + 93 * sh0) + ')');
+      // weißer Stoff: nur ganz sanfte, leicht warme Schatten in den Falten
+      var sh0 = o / (LEV - 1);
+      cols.push('rgb(' + Math.round(232 + 23 * sh0) + ',' + Math.round(228 + 27 * sh0) + ',' + Math.round(224 + 31 * sh0) + ')');
     }
     function draw() {
       cx.setTransform(1, 0, 0, 1, 0, 0);
@@ -796,7 +797,7 @@ body.locked { overflow: hidden; }
           var ex = P[B] - P[A], ey = P[B + 1] - P[A + 1], ez = P[B + 2] - P[A + 2];
           var fx2 = P[D] - P[A], fy = P[D + 1] - P[A + 1], fz = P[D + 2] - P[A + 2];
           var nx = ey * fz - ez * fy, ny = ez * fx2 - ex * fz, nz = ex * fy - ey * fx2, nl = Math.hypot(nx, ny, nz) || 1;
-          var lam = Math.abs((nx * LX + ny * LY + nz * LZ) / nl), sh = Math.min(1, Math.max(0, (lam - .1) / .9)) * (1 - .18 * r / ROWS);
+          var lam = Math.abs((nx * LX + ny * LY + nz * LZ) / nl), sh = Math.sqrt(Math.min(1, Math.max(0, (lam - .05) / .8)));
           var pa = paths[Math.round(sh * (LEV - 1))];
           // Fläche minimal vergrößert, damit keine Spalten zwischen den Flächen entstehen
           var mx2 = (sx[a] + sx[b] + sx[d] + sx[e]) / 4, my2 = (sy2[a] + sy2[b] + sy2[d] + sy2[e]) / 4, g = 1.1;
