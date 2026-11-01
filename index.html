@@ -124,6 +124,10 @@ body.locked { overflow: hidden; }
   animation: orb var(--dur, 8s) ease-in-out infinite alternate;
 }
 @keyframes orb { from { transform: translate(0, 0) scale(.85); opacity: .35; } to { transform: translate(var(--dx, 10px), var(--dy, -20px)) scale(1.1); opacity: .85; } }
+.credit {
+  position: absolute; left: 0; right: 64px; bottom: 6px; z-index: 2; margin: 0; padding-left: 64px;
+  text-align: center; font-size: 9px; letter-spacing: .02em; color: var(--ink); opacity: .38; pointer-events: none;
+}
 .closing { margin: 0; font-family: var(--f-script); font-size: 32px; line-height: 1.15; color: var(--ink); text-wrap: balance; }
 
 .js .reveal {
@@ -300,7 +304,7 @@ body.locked { overflow: hidden; }
   <div class="flash"></div>
 </div>
 
-<audio id="music" src="hava-nagila-piano.mp3" preload="auto" loop></audio>
+<audio id="music" src="hava-nagila-fluegel.mp3" preload="auto" loop></audio>
 <button type="button" class="music-btn" id="musicBtn" aria-label="Музыка" aria-pressed="false" hidden>
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18.5a2.5 2.5 0 1 1-2.5-2.5c.9 0 1.7.5 2.1 1.2V5.5l10-2v12a2.5 2.5 0 1 1-2.5-2.5c.9 0 1.7.5 2.1 1.2V7.3L9 8.9z" fill="currentColor"/><path class="mute" d="M3 3l18 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
 </button>
@@ -349,6 +353,7 @@ body.locked { overflow: hidden; }
 
     <p class="closing reveal" style="--i:7">Будем рады видеть вас!</p>
   </article>
+  <p class="credit">Фортепиано: Salamander Grand Piano · Alexander Holm · CC BY 3.0</p>
 </main>
 
 <canvas id="fx" aria-hidden="true"></canvas>
